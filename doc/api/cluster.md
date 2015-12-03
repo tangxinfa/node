@@ -74,7 +74,7 @@ where over 70% of all connections ended up in just two processes,
 out of a total of eight.
 
 Because `server.listen()` hands off most of the work to the master
-process, there are three cases where the behavior between a normal
+process, there are four cases where the behavior between a normal
 Node.js process and a cluster worker differs:
 
 1. `server.listen({fd: 7})` Because the message is passed to the master,
@@ -91,6 +91,8 @@ Node.js process and a cluster worker differs:
    port is random the first time, but predictable thereafter.  If you
    want to listen on a unique port, generate a port number based on the
    cluster worker ID.
+4. `server.listen(backlog)` Because backlog is freeze when master listens
+   on port, if workers use different backlog, the first one take effect.
 
 There is no routing logic in Node.js, or in your program, and no shared
 state between the workers.  Therefore, it is important to design your
